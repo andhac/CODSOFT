@@ -1,14 +1,14 @@
 import express from "express";
+import {CompanyModel, UserModel} from "../../Database/allModel";
+
 const router = express.Router();
-import {UserModel} from "../../Database/user";
-import {CompanyModel} from "../../Database/company";
-const auth = require('../../middlewares/auth')
+const {auth} = require('../../middlewares/auth')
 /**
  * @route POST /
  * @desc Create a new company
  * @access Public
  */
-router.post('/' , auth,async (req, res)=> {
+router.post('/', auth, async (req, res) => {
     try{
         const {name, description, location, website, size, logo, postedBy } = req.body;
         const checkCompany =  await CompanyModel.findOne({name: name});

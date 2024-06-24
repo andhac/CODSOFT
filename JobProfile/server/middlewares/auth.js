@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 
+const {UserModel} = require('../Database/allModel')
 const auth = (req,res,next) => {
     try{
         let token = req.headers.authorization;
@@ -16,4 +17,17 @@ const auth = (req,res,next) => {
     }
 }
 
-module.exports = auth;
+const employerOnly = async (req, res, next) => {
+    try {
+        const user = await UserModel.findById(req.userId);
+        if (user.role !== "employer") {
+            return res.status(400).json({message: "Access denied. Only employer can access this route"});
+        }
+        next();
+    } catch (err) {
+        console.log(err);
+        return res.status(500).json({message: "Something went wrong"});
+    }
+}
+
+module.exports = {auth, employerOnly}
