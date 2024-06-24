@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.post('/', auth, async (req, res) => {
     try{
-        const {title, description, company, location, employmentType, postedBy} = req.body;
+        const {title, description, company, location, employmentType} = req.body;
         const user = await UserModel.findById(req.userId);
         if(!user){
             return res.status(400).json({message: "User does not exist"});

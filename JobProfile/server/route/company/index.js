@@ -10,7 +10,7 @@ const {auth} = require('../../middlewares/auth')
  */
 router.post('/', auth, async (req, res) => {
     try{
-        const {name, description, location, website, size, logo, postedBy } = req.body;
+        const {name, description, location, website, size, logo} = req.body;
         const checkCompany =  await CompanyModel.findOne({name: name});
         if(checkCompany){
             return res.status(400).json({message: "Company already exists"});
