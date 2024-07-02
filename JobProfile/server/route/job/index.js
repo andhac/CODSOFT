@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.post('/', auth, async (req, res) => {
     try{
-        const {title, description, company, location, employmentType} = req.body;
+        const {title, description, company, role, location, employmentType} = req.body;
         const user = await UserModel.findById(req.userId);
         if(!user){
             return res.status(400).json({message: "User does not exist"});
@@ -28,6 +28,7 @@ router.post('/', auth, async (req, res) => {
             title: title,
             description: description,
             company:checkCompany._id,
+            role: role,
             location: location,
             employmentType: employmentType,
             postedBy: req.userId
@@ -49,7 +50,7 @@ router.post('/', auth, async (req, res) => {
 router.get('/', async (req, res) => {
     try {
         const {title} = req.query;
-        const job = await JobModel.find({title: title});
+        const job = await JobModel.find({title: new RegExp(title, 'i')});
         if (job.length === 0) {
             return res.status(400).json({message: "No job found"});
         }
@@ -79,6 +80,25 @@ router.get('/company', async (req, res) => {
         }
         res.status(200).json(job);
     } catch (err) {
+        console.log(err);
+        res.status(500).json({message: "Something went wrong"});
+    }
+})
+
+/**
+ * @Route GET /:_id
+ * @Desc Get job by id
+ * @Access Public
+ */
+router.get('/:id', async (req, res) => {
+    try{
+        const {id} = req.params;
+        const job = await JobModel.find({_id: id});
+        if(job.length === 0){
+            return res.status(400).json({message: "No job found for this particular Role"});
+        }
+        res.status(200).json(job);
+    }catch (err){
         console.log(err);
         res.status(500).json({message: "Something went wrong"});
     }

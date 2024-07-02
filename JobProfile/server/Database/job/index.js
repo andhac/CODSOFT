@@ -14,6 +14,11 @@ const JobSchema = new mongoose.Schema({
         ref: 'Company',
         required: true
     },
+    role:{
+        type: String,
+        required: true
+    },
+
     location:{
         type: String,
         required: true
