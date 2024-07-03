@@ -1,17 +1,29 @@
 import React, {useState} from 'react';
+import classNames from "classnames";
 import {useNavigate} from "react-router-dom";
 import { GrLocation } from "react-icons/gr";
 import { HiOutlineOfficeBuilding } from "react-icons/hi"
 function Hero() {
     const photo = require('../../assets/Image/job.jpg')
     const [search, setSearch] = useState('')
+    const [isSearchEmpty, setIsSearchEmpty] = useState(false);
     const navigate = useNavigate();
     const handleSearch = () => {
+        if(!search.trim()){
+            setIsSearchEmpty(true)
+            return
+        }
+
         navigate(`/search?q=${search}`)
     }
 
     const handleReset = () => {
         setSearch('')
+        setIsSearchEmpty(false)
+    }
+    const handleChange = (e) => {
+        setSearch(e.target.value);
+        if (isSearchEmpty) setIsSearchEmpty(false) // Reset border color when user is start typing
     }
 
     return (
@@ -45,12 +57,14 @@ function Hero() {
                             </svg>
                         </span>
                         <input
-                            className="w-52 input rounded-full px-8 py-3 border-2 border-transparent focus:outline-none focus:border-blue-500 placeholder-gray-400 transition-all duration-300 shadow-md"
+                            className={classNames("w-52 input rounded-full px-8 py-3 border-2 border-transparent focus:outline-none focus:border-blue-500 placeholder-gray-400 transition-all duration-300 shadow-md", {
+                                "border-red-500": isSearchEmpty
+                            })}
                             placeholder="Search for job.."
                             required=""
                             type="text"
                             value={search}
-                            onChange={(e) => setSearch(e.target.value)}
+                            onChange={handleChange}
                         />
                         {search && (
                             <button onClick={handleReset} type="reset" className="absolute right-3 -translate-y-1/2 top-1/2 p-1">

@@ -10,10 +10,10 @@ function Navbar() {
     })
     return (
         <>
-            <nav className="flex bg-white w-full items-center justify-between shadow-2xl p-4 h-16">
+            <nav className=" flex bg-white w-full items-center justify-between shadow-2xl p-4 h-16">
                 <div className="items-center flex">
                     <img src={logo} alt="Logo" className="w-12"/>
-                    <a href="/" className="text-gray-950 p-4">Three Jobs</a>
+                    <a href="/" className="text-gray-950 p-3">Three Jobs</a>
                 </div>
                 <div>
                     <a href="/login" className="text-gray-950 p-4 transition-all delay-150 hover:text-xl">Home</a>
