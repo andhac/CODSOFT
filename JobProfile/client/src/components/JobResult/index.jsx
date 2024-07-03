@@ -1,18 +1,17 @@
 import React from 'react';
-import {useLocation} from "react-router-dom";
-import {Link} from 'react-router-dom'
-import { FaStar } from "react-icons/fa";
-import { GrLocation } from "react-icons/gr";
-import { IoBagOutline } from "react-icons/io5";
-import { LiaRupeeSignSolid } from "react-icons/lia";
-import { MdOutlineDescription } from "react-icons/md";
+import {Link, useLocation} from "react-router-dom";
+import {FaStar} from "react-icons/fa";
+import {GrLocation} from "react-icons/gr";
+import {IoBagOutline} from "react-icons/io5";
+import {LiaRupeeSignSolid} from "react-icons/lia";
+import {MdOutlineDescription} from "react-icons/md";
 import jobs from "../../assets/rawData/MOCK_DATA (1).json"
 
 const useQuery = () => {
     return new URLSearchParams(useLocation().search);
 }
 
-const JobResult = (props) => {
+const JobResult = () => {
     const query = useQuery();
     const searchQuery = query.get('q').toLowerCase();
     console.log(searchQuery);
@@ -20,7 +19,10 @@ const JobResult = (props) => {
 
     return (
         <>
-            {filterJob.map((job) =>
+            {filterJob.length === 0 ? (
+                <div className='w-full h-full text-xl'>NO JOb Found</div>
+            ) : (
+                filterJob.map(( job ) =>
             <Link to={`/job/${job.id}`} className='w-full flex  justify-center items-center'>
                 <div className='bg-white p-4 my-6 mx-10 rounded-2xl transition duration-700 ease-in-out hover:shadow-xl'>
                     <div className="w-[700px] relative">
@@ -58,6 +60,7 @@ const JobResult = (props) => {
                     </div>
                 </div>
             </Link>
+                )
             )}
         </>
     );
