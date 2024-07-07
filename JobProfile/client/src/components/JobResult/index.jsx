@@ -12,7 +12,7 @@ const useQuery = () => {
     return new URLSearchParams(useLocation().search);
 }
 
-const JobResult = (jobPage) => {
+const JobResult = () => {
     const query = useQuery();
     const searchQuery = query.get('q').toLowerCase();
 
