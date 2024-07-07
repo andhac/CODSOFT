@@ -2,12 +2,13 @@ import React, {useState} from 'react';
 import {RxHamburgerMenu} from "react-icons/rx"
 import {FaUserCircle} from "react-icons/fa"
 import logo from "../../assets/Image/LOGO.png";
-
+import SignIn from "../Auth/SignIn";
 function Navbar() {
     const logo = require('../../assets/Image/LOGO.png')
     const[user, setUser] = useState({
-        userName: 'Usr',
     })
+    const [isSignInOpen, setIsSignInOpen] = useState(false);
+
     return (
         <>
             <div className='lg:inline container mx-auto items-center  '>
@@ -42,6 +43,7 @@ function Navbar() {
                             <>
                                 <div className="inline-block relative mx-3">
                                     <button
+                                        onClick={() => setIsSignInOpen(true)}
                                         className="bg-transparent border-2 hover:bg-white h-10   text-gray-950 hover:text-black py-2 px-4 rounded-3xl w-24">
                                         Log In
                                     </button>
@@ -52,6 +54,7 @@ function Navbar() {
                                         Sign Up
                                     </button>
                                 </div>
+                                <SignIn isOpen={isSignInOpen} setIsOpen={setIsSignInOpen}/>
                             </>
 
                         )}

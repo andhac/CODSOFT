@@ -5,6 +5,7 @@ import JobResult from "../components/JobResult";
 import Cards from "../components/Cards";
 import Footer from "../components/Footer";
 import JobPage from "../components/JobPage/JobPage";
+import SignIn from "../components/Auth/SignIn";
 
 const ComponentPreviews = () => {
     return (
@@ -29,6 +30,9 @@ const ComponentPreviews = () => {
             </ComponentPreview>
             <ComponentPreview path="/JobPage">
                 <JobPage/>
+            </ComponentPreview>
+            <ComponentPreview path="/SignIn">
+                <SignIn/>
             </ComponentPreview>
         </Previews>
     )
