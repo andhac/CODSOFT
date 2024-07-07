@@ -9,7 +9,7 @@ const youtube = require('../../assets/Image/video.png')
 
 const Footer = () => {
     return (<>
-            <div className=' bg-blue-950 h-92 w-full p-1'>
+            <div className=' lg:w-full items-center  bg-blue-950 h-92  p-1'>
                 <div className='m-20 flex justify-evenly'>
                     <div className=' w-72'>
                         <div className='inline justify-evenly w-full  items-center'>
@@ -53,11 +53,11 @@ const Footer = () => {
                 <div className='my-5 flex justify-evenly '>
                     <div className='text-gray-400 text-sm'>© 2024 Three Jobs. All rights reserved</div>
                     <div className='flex gap-2'>
-                        <a className=''> <img className=' border-white border-2 rounded-full  w-8 h-18' src={instagram}/></a>
-                        <a className=''> <img className=' border-white border-2 rounded-full  w-8 h-18' src={twitter}/> </a>
-                        <a className=''> <img className='  w-8 h-18' src={facebook}/></a>
-                        <a className=''> <img className=' border-white border-2 rounded-full  w-8 h-8' src={youtube}/> </a>
-                        <a className=''> <img className='  w-8 h-18' src={linkedin}/></a>
+                        <a href='/' className=''> <img className=' border-white border-2 rounded-full  w-8 h-18' src={instagram} alt='instagram'/></a>
+                        <a href='/' className=''> <img className=' border-white border-2 rounded-full  w-8 h-18' src={twitter} alt='twitter' /> </a>
+                        <a href='/' className=''> <img className='  w-8 h-18' src={facebook} alt='facebook' /></a>
+                        <a href='/' className=''> <img className=' border-white border-2 rounded-full  w-8 h-8' alt='youtube' src={youtube}/> </a>
+                        <a href='/' className=''> <img className='  w-8 h-18' src={linkedin} alt='linkedin' /></a>
                     </div>
                     <div className=' flex gap-5 '>
                         <div className='text-gray-400 text-sm'>Privacy Policy</div>
