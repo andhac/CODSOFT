@@ -20,6 +20,6 @@ export const PaletteTree = () => (
 
 export function ExampleLoaderComponent() {
     return (
-        <S>Loading...</S>
+        <>Loading...</>
     )
 }

@@ -4,6 +4,7 @@ import Navbar from "../components/Navbar";
 import JobResult from "../components/JobResult";
 import Cards from "../components/Cards";
 import Footer from "../components/Footer";
+import JobPage from "../components/JobPage/JobPage";
 
 const ComponentPreviews = () => {
     return (
@@ -25,6 +26,9 @@ const ComponentPreviews = () => {
             </ComponentPreview>
             <ComponentPreview path="/Footer">
                 <Footer/>
+            </ComponentPreview>
+            <ComponentPreview path="/JobPage">
+                <JobPage/>
             </ComponentPreview>
         </Previews>
     )
