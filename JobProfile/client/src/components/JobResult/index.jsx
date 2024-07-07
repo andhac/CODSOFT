@@ -1,69 +1,129 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Link, useLocation} from "react-router-dom";
 import {FaStar} from "react-icons/fa";
 import {GrLocation} from "react-icons/gr";
 import {IoBagOutline} from "react-icons/io5";
 import {LiaRupeeSignSolid} from "react-icons/lia";
 import {MdOutlineDescription} from "react-icons/md";
-import jobs from "../../assets/rawData/MOCK_DATA (1).json"
+import jobs from "../../assets/rawData/MOCK_DATA.json"
+
 
 const useQuery = () => {
     return new URLSearchParams(useLocation().search);
 }
 
-const JobResult = () => {
+const JobResult = (jobPage) => {
     const query = useQuery();
     const searchQuery = query.get('q').toLowerCase();
+
     console.log(searchQuery);
     const filterJob = jobs.filter(job => job.title.toLowerCase().includes(searchQuery));
+    const [currentPage, setCurrentPage] = useState(1);
+    const jobPerPage = 10;
+
+    //Calculating the index of the last job
+    const indexOfLastJob = currentPage * jobPerPage;
+    const indexOfFirstJob = indexOfLastJob - jobPerPage;
+    const currentJob = filterJob.slice(indexOfFirstJob, indexOfLastJob);
+
+    //Calculate the total number of pages
+    const totalPage = Math.ceil(filterJob.length / jobPerPage);
+
+    //Navigation for next Page
+    const nextPage = () => {
+        if (currentPage < totalPage) {
+            setCurrentPage(currentPage + 1)
+        }
+    }
+
+    //Navigation for previous Page
+    const prevPage = () => {
+        if (currentPage > 1) {
+            setCurrentPage(currentPage - 1)
+        }
+    }
 
     return (
         <>
+
+            <div className='text-center py-10   '>
+                Showing {indexOfFirstJob + 1} to {indexOfLastJob > filterJob.length ? filterJob.length : indexOfLastJob} of {filterJob.length} jobs
+            </div>
             {filterJob.length === 0 ? (
-                <div className='w-full h-full text-xl'>NO JOb Found</div>
-            ) : (
-                filterJob.map(( job ) =>
-            <Link to={`/job/${job.id}`} className='w-full flex  justify-center items-center'>
-                <div className='bg-white p-4 my-6 mx-10 rounded-2xl transition duration-700 ease-in-out hover:shadow-xl'>
-                    <div className="w-[700px] relative">
-                        <div className="w-full">
-                            <div className="flex text-black ">
-                                {job.title}
+               <div className='w-full flex justify-center' >
+                    <div className='container max-w-2xl'>
+                        <div className=' my-2 bg-white p-6 border border-gray-100 shadow-lg rounded-3xl ' >
+                            <div className='flex items-center justify-center ' >
+                                <img src='https://static.naukimg.com/s/9/121/_next/static/media/zeroJobs-found.72c8c9ae.png' alt='No Jobs Found' className='w-60' />
                             </div>
-                            <div className="text-[#474d6a]  text-sm ">
-                                {job.company} <FaStar  className='mx-1 mb-1 text-yellow-400 inline w-3 h-3' /><span className='text-[#717b9e]'>4.3 <span className="text-gray-300">|</span> 1.5km </span>
-                            </div>
-                            <div className="pt-4 text-gray-600">
-                                <IoBagOutline className="inline items-center justify-center pb-1 w-6 h-6"/>
-                                <span className="px-2 text-sm">{job.experience}</span>
-                                <span className="text-gray-300">|</span>
-                                <LiaRupeeSignSolid className=" pl-2 inline items-center justify-center pb-1 w-6 h-6"/>
-                                <span className="pl-1 pr-2 text-sm">Not Disclose</span>
-                                <span className="text-gray-300">|</span>
-                                <GrLocation className=" pl-2 inline items-center justify-center pb-1 w-6 h-6"/>
-                                <span className="pl-1 text-sm">{job.location}</span>
-                            </div>
-                            <div className="pt-2 text-gray-600 line-clamp-1 overflow-ellipsis">
-                                <MdOutlineDescription className="inline items-center justify-center pb-1 w-6 h-6"/>
-                                <span className="pl-2 text-sm font-thin  ">{job.description}</span>
-                            </div>
-                            <div className="py-2 text-gray-400">
-                                <ul className="flex space-x-2">
-                                    <li className=" rounded-full px-2 text-sm">HTML</li>
-                                    <li className=" rounded-full px-2 text-sm">CSS</li>
-                                    <li className=" rounded-full px-2 text-sm">JavaScript</li>
-                                    <li className=" rounded-full px-2 text-sm">React</li>
-                                    <li className=" rounded-full px-2 text-sm">Node</li>
-                                </ul>
+                            <div className='mt-10'>
+                                <h1 className=' text-xl text-center mb-2 ' >No Result Found </h1>
+                                <p className='text-center font-sans text-slate-400' > Modify Search Criteria  </p>
                             </div>
                         </div>
                     </div>
-                </div>
-            </Link>
+               </div>
+            ) : (
+                currentJob.map(( job ) =>
+                    <Link to={`/job/${job.id}`}
+                          key={job.id} className='w-full flex justify-center'>
+                        <div  className='w-full max-w-2xl '>
+                            <div
+                                className='bg-white p-6 my-4 rounded-2xl transition duration-500 ease-in-out hover:shadow-2xl border border-gray-200'>
+                                <div className="w-full relative">
+                                    <div className="flex justify-between items-center mb-2">
+                                        <div className="text-xl font-semibold text-black">{job.title}</div>
+                                        <div className="text-sm text-gray-500 flex items-center">
+                                            {job.company}
+                                            <FaStar className='mx-1 text-yellow-400 w-4 h-4'/>
+                                            <span className='text-gray-600'>4.3 | 1.5km</span>
+                                        </div>
+                                    </div>
+                                    <div className="text-gray-600 text-sm flex items-center mb-4">
+                                        <IoBagOutline className="mr-2 w-5 h-5"/>
+                                        <span className="mr-2">{job.experience}</span>
+                                        <span className="text-gray-400">|</span>
+                                        <LiaRupeeSignSolid className="ml-2 mr-1 w-5 h-5"/>
+                                        <span className="mr-2">{job.salary}</span>
+                                        <span className="text-gray-400">|</span>
+                                        <GrLocation className="ml-2 mr-1 w-5 h-5"/>
+                                        <span>{job.location}</span>
+                                    </div>
+                                    <div className="text-gray-700 mb-4">
+                                        <MdOutlineDescription className="inline mr-2 w-5 h-5"/>
+                                        <span>{job.shortDescription}</span>
+                                    </div>
+                                    <div className="flex flex-wrap gap-2">
+                                        {["HTML", "CSS", "JavaScript", "React", "Node"].map(( skill, index ) => (
+                                            <span key={index}
+                                                  className="bg-blue-100 text-blue-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">{skill}</span>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </Link>
                 )
+
             )}
+            <div className='flex justify-center my-6'>
+                <button onClick={prevPage}
+                        className='px-4 py-2 mx-2 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed '
+                        disabled={currentPage === 1}>
+                    Previous
+                </button>
+                <div
+                    className='text-white bg-gray-700 rounded-lg mx-2  hover:bg-gray-900 flex items-center px-3 '> {currentPage} of {totalPage} </div>
+                <button onClick={nextPage}
+                        className='px-4 py-2 mx-2 text-gray-700 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed '
+                        disabled={currentPage === totalPage}>
+                    Next
+                </button>
+
+            </div>
         </>
-    );
+    )
+        ;
 };
 
 export default JobResult;
