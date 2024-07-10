@@ -18,6 +18,7 @@ router.post("/", async (req, res) => {
             return res.status(400).json({message: "Invalid credentials"});
         }
         const token = jwt.sign({email:existingUser.email, id: existingUser._id}, process.env.SECRET_KEY);
+        res.cookie('token', token,{httpOnly: true, maxAge: 24*60*60*1000})
         res.status(200).json({user: existingUser, token: token});
     }catch (err) {
         console.log(err);

@@ -6,5 +6,6 @@ router.use('/job', require('./job'));
 router.use('/application', require('./application'));
 router.use('/notification', require('./notification'));
 router.use('/notes' , require('./notes'));
+router.use('/user', require('./user'))
 
 module.exports = router;

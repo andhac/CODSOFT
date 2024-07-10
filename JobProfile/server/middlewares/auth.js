@@ -1,19 +1,27 @@
 import jwt from "jsonwebtoken";
 
 const {UserModel} = require('../Database/allModel')
-const auth = (req,res,next) => {
+const auth = async (req,res,next) => {
     try{
-        let token = req.headers.authorization;
-        if(token){
-            token = token.split(" ")[1];
-            let user = jwt.verify(token, process.env.SECRET_KEY);
-            req.userId = user.id;
-        }else {
+        let token = req.cookies.token || req.headers.authorization;
+        if(!token) {
             return res.status(401).json({message: "Unauthorized"})
+        }
+        token = token.split(" ")[1]
+       let decodedData;
+        try{
+            decodedData = jwt.verify(token, process.env.SECRET_KEY);
+        }catch (err) {
+            return res.status(401).json({message:"Invalid Token"})
+        }
+        req.userId = decodedData.id;
+        const user = await UserModel.findById(req.userId);
+        if(!user){
+            return res.status(404).json({message: "User not found"})
         }
         next();
     }catch (err){
-        return res.status(401).json({message: "Unauthorized"})
+        return res.status(401).json({message: "Internal Server Error"})
     }
 }
 

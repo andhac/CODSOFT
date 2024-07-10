@@ -20,7 +20,7 @@ router.post("/", async (req, res) => {
       return res.status(400).json({message: "User already exists"});
     }
     const hashPassword = await bcrypt.hash(password, 10);
-    const user = await UserModel.create({
+    const user = new UserModel({
       email: email,
       password: hashPassword,
       userName: userName,
@@ -31,9 +31,10 @@ router.post("/", async (req, res) => {
             resume: resume
         }
     });
+    await user.save();
+
     const token = jwt.sign({email: user.email, id: user._id}, process.env.SECRET_KEY);
-    const cook = res.cookie('token', token, {httpOnly: false, maxAge: 24*60*60*1000});
-    console.log(cook);
+    res.cookie('token', token, {httpOnly: false, maxAge: 24*60*60*1000});
     res.status(200).json({user: user, token: token});
   } catch (err){
     console.log(err);

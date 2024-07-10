@@ -113,7 +113,7 @@ const SignUp = () => {
                         Create your Three Jobs profile
                     </h1>
                     <div className='mt-2 py-1'>
-                        <form onSubmit={handleSubmit} className=' flex flex-col gap-1 my-7 ' noValidate >
+                        <form onSubmit={handleSubmit} className=' flex flex-col gap-1 my-7 ' noValidate>
                             <label className='font-semibold flex'>
                                 Username <FaAsterisk className='w-[6px] text-red-500'/>
                             </label>
@@ -133,11 +133,11 @@ const SignUp = () => {
                             </label>
                             <input type="email" name="email" placeholder="Tell us your Email ID" id='email'
                                    value={userData.email}
-                                   className={classNames(' border  rounded-2xl w-[568px] p-3 focus:outline-none focus:border-blue-500 transition duration-300 ',{
-                                        'border-red-500': errors.email
+                                   className={classNames(' border  rounded-2xl w-[568px] p-3 focus:outline-none focus:border-blue-500 transition duration-300 ', {
+                                       'border-red-500': errors.email
                                    })}
                                    onChange={handleChange}
-                                   />
+                            />
                             {errors.email && <p className='text-red-500 text-sm'>{errors.email}</p>}
                             <label className=' flex font-semibold mt-4 '>
                                 Password <FaAsterisk className=' w-[6px] text-red-500'/>
@@ -148,7 +148,7 @@ const SignUp = () => {
                                        placeholder="(Minimum 6 characters)"
                                        id='password' value={userData.password}
                                        className=' border border-slate-200 rounded-2xl w-[568px] p-3 focus:outline-none focus:border-blue-500 transition duration-300 '
-                                       onChange={handleChange} />
+                                       onChange={handleChange}/>
                                 {isPasswordEmpty && (
                                     <button type='button' onClick={() => setShowPassword(!showPassword)}
                                             className='absolute right-3 top-1/3 transform -translate-y-1/2  '>
@@ -165,7 +165,7 @@ const SignUp = () => {
                                    value={userData.name}
                                    className=' border border-slate-200 rounded-2xl w-[568px] p-3 focus:outline-none focus:border-blue-500 transition duration-300 '
                                    onChange={handleChange}
-                                   />
+                            />
                             {errors.name && <p className='text-red-500 text-sm'>{errors.name}</p>}
                             <label className='font-semibold mt-4 flex '>
                                 Contact Number <FaAsterisk className=' w-[6px] text-red-500'/>
@@ -178,7 +178,7 @@ const SignUp = () => {
                                        value={userData.contactNumber}
                                        className=' border border-slate-200 rounded-2xl w-[568px] p-3 pl-9 no-spinner focus:outline-none focus:border-blue-500 transition duration-300  '
                                        onChange={handleChange}
-                                       />
+                                />
                                 {errors.contactNumber && <p className='text-red-500 text-sm'>{errors.contactNumber}</p>}
                             </div>
                             <div className="flex items-center mt-2">
@@ -198,8 +198,9 @@ const SignUp = () => {
                                 />
                                 <span className="ml-2 text-gray-500 text-sm">DOC, DOCX, PDF, RTF | Max: 2 MB</span>
                             </div>
-                            {userData.resume && (<span className="ml-2 text-green-500 text-sm" >File uploaded: {userData.resume.name}</span>) }
-                                {errors.resume && <p className='text-red-500 text-sm'>{errors.resume}</p>}
+                            {userData.resume && (<span
+                                className="ml-2 text-green-500 text-sm">File uploaded: {userData.resume.name}</span>)}
+                            {errors.resume && <p className='text-red-500 text-sm'>{errors.resume}</p>}
                             <button
                                 type="submit"
                                 className="bg-blue-500 text-white rounded-full py-2 px-4 mt-4 hover:bg-blue-600 transition duration-300"
