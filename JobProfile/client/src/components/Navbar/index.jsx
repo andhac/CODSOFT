@@ -1,9 +1,17 @@
 import React, {useState} from 'react';
+import {useNavigate} from "react-router-dom";
 import {RxHamburgerMenu} from "react-icons/rx"
 import {FaUserCircle} from "react-icons/fa"
 import logo from "../../assets/Image/LOGO.png";
 import SignIn from "../Auth/SignIn";
 function Navbar() {
+    const navigate = useNavigate();
+    const redirect = () => {
+        navigate('/')
+    }
+    const navigateToCreateUser = () =>{
+        navigate('/create-account')
+    }
     const logo = require('../../assets/Image/LOGO.png')
     const[user, setUser] = useState({
     })
@@ -12,14 +20,14 @@ function Navbar() {
     return (
         <>
             <div className='lg:inline container mx-auto items-center  '>
-                <nav className=" sticky top-0  z-10 flex bg-white w-full items-center justify-between  gap-4 p-4 h-16 ">
-                    <div className="items-center flex">
-                        <img src={logo} alt="Logo" className="w-12"/>
-                        <a href="/" className="text-gray-950 p-3">Three Jobs</a>
+                <nav className=" sticky top-0  z-10 flex bg-white w-full items-center justify-around  gap-4 p-4 h-full ">
+                    <div className="items-center flex hover:cursor-pointer " onClick={redirect} >
+                        <img src={logo} alt="Logo" className="w-20"/>
+                        <a href="/" className=" text-xl text-gray-950 p-3">Three Jobs</a>
                     </div>
                     <div>
-                        <a href="/login" className="text-gray-950 p-4 transition-all delay-150 hover:text-xl">Home</a>
-                        <a href="/signup" className="text-gray-950 p-4 transition-all delay-150 hover:text-xl">Browser
+                        <a href="/" className="text-gray-950 p-4 transition-all delay-150 hover:text-xl">Home</a>
+                        <a href="/" className="text-gray-950 p-4 transition-all delay-150 hover:text-xl">Browser
                             job </a>
                         <div className="group inline-block relative">
                             <a href="/profile"
@@ -49,7 +57,7 @@ function Navbar() {
                                     </button>
                                 </div>
                                 <div className="inline-block relative">
-                                    <button
+                                    <button onClick={navigateToCreateUser}
                                         className="bg-transparent border-2 hover:bg-white h-10   text-gray-950 hover:text-black py-2 px-4 rounded-3xl w-24">
                                         Sign Up
                                     </button>

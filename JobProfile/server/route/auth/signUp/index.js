@@ -13,7 +13,7 @@ router.get("/", async (req, res) => {
 })
 
 router.post("/", async (req, res) => {
-  const {email, password, userName, role} = req.body;
+  const {email, password, userName, role, name, contactNumber, resume} = req.body;
   try {
     const existingUser =  await UserModel.findOne({email: email});
     if(existingUser){
@@ -24,7 +24,12 @@ router.post("/", async (req, res) => {
       email: email,
       password: hashPassword,
       userName: userName,
-      role: role
+      role: role,
+        profile: {
+            name: name,
+            contactNumber: contactNumber,
+            resume: resume
+        }
     });
     const token = jwt.sign({email: user.email, id: user._id}, process.env.SECRET_KEY);
     const cook = res.cookie('token', token, {httpOnly: false, maxAge: 24*60*60*1000});

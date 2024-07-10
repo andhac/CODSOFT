@@ -5,37 +5,58 @@ const {auth} = require('../../middlewares/auth');
 const router = express.Router();
 
 /**
-    @Route POST /
-    @Desc Create a new job
-    @Access Private
+ @Route POST /
+ @Desc Create a new job
+ @Access Private
  **/
 
-router.post('/', auth, async (req, res) => {
-    try{
-        const {title, description, company, role, location, employmentType} = req.body;
+router.post('/', auth, async ( req, res ) => {
+    try {
+        const {
+            title,
+            description,
+            company,
+            role,
+            location,
+            employmentType,
+            education,
+            experience,
+            salary,
+            openings,
+            skills,
+            shortDescription,
+            deparment
+        } = req.body;
         const user = await UserModel.findById(req.userId);
-        if(!user){
+        if (!user) {
             return res.status(400).json({message: "User does not exist"});
         }
-        if(user.role !== "employer"){
+        if (user.role !== "employer") {
             return res.status(400).json({message: "User is not authorized to create job"});
         }
         const checkCompany = await CompanyModel.findOne({name: company});
-        if(!checkCompany){
+        if (!checkCompany) {
             return res.status(400).json({message: "Company does not exist"});
         }
         const job = await JobModel.create({
             title: title,
             description: description,
-            company:checkCompany._id,
+            company: checkCompany._id,
             role: role,
             location: location,
             employmentType: employmentType,
-            postedBy: req.userId
+            postedBy: req.userId,
+            education: education,
+            experience: experience,
+            salary: salary,
+            openings: openings,
+            skills: skills,
+            shortDescription: shortDescription,
+            department: deparment
         })
         res.status(200).json({job: job});
 
-    }catch (err){
+    } catch (err) {
         console.log(err);
         res.status(500).json({message: "Something went wrong"});
     }
@@ -47,7 +68,7 @@ router.post('/', auth, async (req, res) => {
  @Access Public
  **/
 
-router.get('/', async (req, res) => {
+router.get('/', async ( req, res ) => {
     try {
         const {title} = req.query;
         const job = await JobModel.find({title: new RegExp(title, 'i')});
@@ -67,7 +88,7 @@ router.get('/', async (req, res) => {
  @Access Public
  **/
 
-router.get('/company', async (req, res) => {
+router.get('/company', async ( req, res ) => {
     try {
         const {company} = req.query;
         const checkCompany = await CompanyModel.findOne({name: company});
@@ -90,15 +111,15 @@ router.get('/company', async (req, res) => {
  * @Desc Get job by id
  * @Access Public
  */
-router.get('/:id', async (req, res) => {
-    try{
+router.get('/:id', async ( req, res ) => {
+    try {
         const {id} = req.params;
         const job = await JobModel.find({_id: id});
-        if(job.length === 0){
+        if (job.length === 0) {
             return res.status(400).json({message: "No job found for this particular Role"});
         }
         res.status(200).json(job);
-    }catch (err){
+    } catch (err) {
         console.log(err);
         res.status(500).json({message: "Something went wrong"});
     }
@@ -110,7 +131,7 @@ router.get('/:id', async (req, res) => {
  @Access Private
  **/
 
-router.put('/:_id', auth, (req, res) => {
+router.put('/edit/:_id', auth, ( req, res ) => {
     try {
         const {_id} = req.params;
         const {title, description, company, location, employmentType} = req.body;
