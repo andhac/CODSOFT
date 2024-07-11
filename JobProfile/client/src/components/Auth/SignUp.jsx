@@ -3,6 +3,11 @@ import * as Yup from 'yup'
 import {getDownloadURL, ref, storage, uploadBytes} from "../../config/firebase";
 import {FaAsterisk, FaCheckCircle, FaRegEye, FaRegEyeSlash} from "react-icons/fa";
 import classNames from "classnames";
+import {useNavigate} from "react-router-dom";
+
+//Redux
+import {useSelector, useDispatch} from "react-redux";
+import {signUp} from "../../redux/slice/authSlice";
 
 const SignUp = () => {
     const validationSchema = Yup.object().shape({
@@ -16,8 +21,13 @@ const SignUp = () => {
 
     const [errors, setErrors] = useState({});
     const [userData, setUserData] = useState({
-        userName: "", email: "", password: "", role: 'job-seeker', name: "", contactNumber: "", resume: null
+        userName: "", email: "", password: "", role: 'job-seeker', name: "", contactNumber: "", resume: ""
     });
+    const navigate = useNavigate();
+
+    const dispatch = useDispatch();
+    const auth = useSelector((state) => state.auth);
+
     const [isPasswordEmpty, setIsPasswordEmpty] = useState('');
     const [uploading, setUploading] = useState(false);
     const handleChange = ( e ) => {
@@ -31,11 +41,12 @@ const SignUp = () => {
         setUserData(( prev ) => ({...prev, resume: e.target.files[0]}))
     }
 
-    const handleSubmit = async ( e ) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+
         setErrors({});
         try {
-            await validationSchema.validate(userData, {abortEarly: false})
+            await validationSchema.validate(userData, { abortEarly: false });
 
             setUploading(true);
 
@@ -44,24 +55,33 @@ const SignUp = () => {
                 try {
                     await uploadBytes(storageRef, userData.resume);
                     const url = await getDownloadURL(storageRef);
-                    setUserData(( prev ) => ({...prev, resume: url}));
                     console.log('Uploaded file URL:', url);
+                    setUserData((prev) => ({ ...prev, resume: url.toString() }));
+                   await dispatch(signUp({ ...userData, resume: url.toString() }));
                 } catch (err) {
                     console.log(err);
                 }
                 setUploading(false);
+            } else {
+                await dispatch(signUp(userData));
+                if (auth.isAuthenticated) {
+                    navigate('/');
+                }
             }
         } catch (err) {
             if (err.inner) {
                 const validateError = {};
-                err.inner.forEach(error => {
+                err.inner.forEach((error) => {
                     validateError[error.path] = error.message;
-                })
-                setErrors(validateError)
+                });
+                setErrors(validateError);
             }
         }
+
         console.log(userData);
-    }
+        console.log("SignUp", auth);
+    };
+
 
     const cartoon = require('../../assets/Image/cartoon.jpg')
 
@@ -71,7 +91,7 @@ const SignUp = () => {
     return (<>
         <div className='container p-10 '>
             <div className='flex justify-around gap-4 w-full my-3 '>
-                <div>
+                <div className='mr-10' >
                     <div className='w-80 border border-gray-100 bg-white rounded-xl fixed '>
 
                         <div className='flex justify-center items-center'>
@@ -108,7 +128,7 @@ const SignUp = () => {
                     </div>
                 </div>
 
-                <div className='  font-sans border border-gray-100 bg-white rounded-xl p-10 '>
+                <div className=' ml-20  font-sans border border-gray-100 bg-white rounded-xl p-10 '>
                     <h1 className='text-xl font-semibold  font-sans '>
                         Create your Three Jobs profile
                     </h1>

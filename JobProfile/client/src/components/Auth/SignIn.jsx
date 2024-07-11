@@ -1,6 +1,10 @@
 import React, {useState} from 'react';
 import {Button, Dialog, DialogPanel, DialogTitle} from '@headlessui/react'
 
+//Redux
+import {useDispatch, useSelector} from "react-redux";
+import { signIn } from '../../redux/slice/authSlice'
+
 const SignIn = ( {isOpen, setIsOpen} ) => {
 
     const [userData, setUserData] = useState({
@@ -8,6 +12,10 @@ const SignIn = ( {isOpen, setIsOpen} ) => {
         password: "",
     })
     const [showPassword, setShowPassword] = useState(false)
+
+    const dispatch = useDispatch();
+    const auth = useSelector((state) => state.auth);
+
 
     const togglePassword = () => {
         setShowPassword(!showPassword)
@@ -17,15 +25,21 @@ const SignIn = ( {isOpen, setIsOpen} ) => {
         setUserData(( prev ) => ({...prev, [e.target.id]: e.target.value}))
     }
 
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        await dispatch(signIn(userData));
+        if(auth.isAuthenticated) {
+            setIsOpen(false)
+            window.location.reload();
+        }
 
-    function close() {
-        setIsOpen(false)
     }
+
 
     return (
         <>
 
-            <Dialog open={isOpen} as="div" className=" relative z-10 focus:outline-none" onClose={close}>
+            <Dialog open={isOpen} as="div" className=" relative z-10 focus:outline-none" onClose={() => setIsOpen(false)}>
 
                 {isOpen && <div className='fixed inset-0 bg-black/50 z-0'></div>}
                 <div className="fixed inset-0 z-10 w-screen overflow-y-auto">
@@ -39,12 +53,12 @@ const SignIn = ( {isOpen, setIsOpen} ) => {
                                     Login
                                 </div>
                                 <div className='text-md font-semibold'>
-                                    <a href='/' className='text-blue-500'>
+                                    <a href='/create-account' className='text-blue-500 font-sans'>
                                         Register For Free
                                     </a>
                                 </div>
                             </DialogTitle>
-                            <form className='flex flex-col gap-2 mt-1 '>
+                            <form className='flex flex-col gap-2 mt-1 ' onSubmit={handleSubmit} >
                                 <div className='w-full flex flex-col my-3'>
                                     <label htmlFor='email' className='text-md  '>Email ID </label>
                                     <input type='email' id='email' value={userData.email}
@@ -71,7 +85,7 @@ const SignIn = ( {isOpen, setIsOpen} ) => {
                             <div className="mt-4 ">
                                 <Button
                                     className="flex justify-center items-center w-full text-center rounded-3xl gap-2 bg-blue-500 py-2 px-3 text-sm/6 font-semibold text-white shadow-inner shadow-white/10 focus:outline-none data-[hover]:bg-blue-700 data-[focus]:outline-1 data-[focus]:outline-white data-[open]:bg-gray-700"
-                                    onClick={close}
+                                    type='submit'
                                 >
                                     Login
                                 </Button>

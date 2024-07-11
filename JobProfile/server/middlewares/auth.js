@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 const {UserModel} = require('../Database/allModel')
 const auth = async (req,res,next) => {
     try{
-        let token = req.cookies.token || req.headers.authorization;
+        let token = req.headers.authorization ||req.cookies.token ;
         if(!token) {
             return res.status(401).json({message: "Unauthorized"})
         }
@@ -21,7 +21,7 @@ const auth = async (req,res,next) => {
         }
         next();
     }catch (err){
-        return res.status(401).json({message: "Internal Server Error"})
+        return res.status(404).json({message: "Internal Server Error"})
     }
 }
 

@@ -1,11 +1,28 @@
-import React, {useState} from 'react';
+import React, { useState} from 'react';
 import {useNavigate} from "react-router-dom";
 import {RxHamburgerMenu} from "react-icons/rx"
 import {FaUserCircle} from "react-icons/fa"
 import logo from "../../assets/Image/LOGO.png";
 import SignIn from "../Auth/SignIn";
+
+//Redux
+import {useSelector, useDispatch} from "react-redux";
+import {logout} from "../../redux/slice/userSlice";
+
+
 function Navbar() {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
+    const auth = useSelector((state) => state.user);
+    console.log(auth)
+    console.log(auth.user?.profile.name)
+
+
+
+    const handleLogut = () => {
+        dispatch(logout());
+        window.location.reload();
+    }
     const redirect = () => {
         navigate('/')
     }
@@ -13,8 +30,6 @@ function Navbar() {
         navigate('/create-account')
     }
     const logo = require('../../assets/Image/LOGO.png')
-    const[user, setUser] = useState({
-    })
     const [isSignInOpen, setIsSignInOpen] = useState(false);
 
     return (
@@ -39,12 +54,22 @@ function Navbar() {
                                 <a href="/" className="block px-4 py-2 text-sm hover:bg-gray-100">Company 3</a>
                             </div>
                         </div>
-                        {user?.userName ? (
-                            <div className="inline-block ">
+                        {auth.isAuthenticated ? (
+                            <div className="inline-block relative ">
+                                <span className='mr-4'>
+                                   Hello, {auth.user?.profile.name}
+                                </span>
+                                <div className='group inline-block relative'>
+
                                 <div
-                                    className="flex bg-transparent border-2 hover:bg-white h-10 transition ease-out delay-150 hover:-translate-y-1 hover:scale-110   text-gray-950 hover:text-black py-2 px-4 rounded-3xl w-24">
+                                    className="flex bg-transparent border-2 hover:bg-white h-10 transition ease-out delay-150 hover:-translate-y-1 hover:scale-110   text-gray-950 hover:text-black py-2 px-4 rounded-3xl w-24 cursor-pointer">
                                     <RxHamburgerMenu className='h-full font-bold text-5xl '/>
                                     <FaUserCircle className=' h-full font-bold text-5xl '/>
+                                </div>
+                                <button onClick={handleLogut} className=' absolute bg-transparent border-2 hover:bg-white h-10 py-2 px-4 rounded-3xl w-24 block invisible group-hover:visible ' >
+                                    Logout
+                                </button>
+
                                 </div>
                             </div>
                         ) : (
