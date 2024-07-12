@@ -34,13 +34,13 @@ const JobSchema = new mongoose.Schema({
         required: true
     },
     employmentType: {
-        type: String,
-        enum: ['full-time', 'part-time', 'internship'],
+        type: [String],
+        enum: ['full-time', 'part-time', 'internship', 'permanent'],
         required: true
     },
     education: [
         {
-            type: String,
+            type: [String],
             required: true
         },
     ],
@@ -54,6 +54,7 @@ const JobSchema = new mongoose.Schema({
     },
     salary: {
         type: String,
+        default: 'Not disclosed',
         required: true
     },
 
@@ -64,7 +65,7 @@ const JobSchema = new mongoose.Schema({
     skills: [
         {
             type: String,
-            required: true
+
         }
     ],
     postedBy: {

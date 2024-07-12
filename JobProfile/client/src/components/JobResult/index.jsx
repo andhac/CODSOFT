@@ -1,12 +1,14 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link, useLocation} from "react-router-dom";
 import {FaStar} from "react-icons/fa";
 import {GrLocation} from "react-icons/gr";
 import {IoBagOutline} from "react-icons/io5";
 import {LiaRupeeSignSolid} from "react-icons/lia";
 import {MdOutlineDescription} from "react-icons/md";
-import jobs from "../../assets/rawData/MOCK_DATA.json"
 
+//Redux
+import {useDispatch, useSelector} from "react-redux";
+import {fetchJobs} from "../../redux/slice/jobSlice";
 
 const useQuery = () => {
     return new URLSearchParams(useLocation().search);
@@ -15,12 +17,21 @@ const useQuery = () => {
 const JobResult = () => {
     const query = useQuery();
     const searchQuery = query.get('q').toLowerCase();
-
     console.log(searchQuery);
-    const filterJob = jobs.filter(job => job.title.toLowerCase().includes(searchQuery));
+    const dispatch = useDispatch();
+    const {jobs, status, error} = useSelector(( state ) => state.jobs)
+    // const filterJob = jobs.filter(job => job.title.toLowerCase().includes(searchQuery));
     const [currentPage, setCurrentPage] = useState(1);
     const jobPerPage = 10;
 
+    useEffect(() => {
+        if (searchQuery) {
+            dispatch(fetchJobs(searchQuery))
+        }
+    }, [searchQuery, dispatch]);
+
+    const filterJob = jobs.filter(job => job.title.toLowerCase().includes(searchQuery));
+console.log("Jobs Detail:", jobs)
     //Calculating the index of the last job
     const indexOfLastJob = currentPage * jobPerPage;
     const indexOfFirstJob = indexOfLastJob - jobPerPage;
@@ -65,7 +76,7 @@ const JobResult = () => {
                </div>
             ) : (
                 currentJob.map(( job ) =>
-                    <Link to={`/job/${job.id}`}
+                    <Link to={`/job/${job._id}`}
                           key={job.id} className='w-full flex justify-center'>
                         <div  className='w-full max-w-2xl '>
                             <div
@@ -74,7 +85,7 @@ const JobResult = () => {
                                     <div className="flex justify-between items-center mb-2">
                                         <div className="text-xl font-semibold text-black">{job.title}</div>
                                         <div className="text-sm text-gray-500 flex items-center">
-                                            {job.company}
+                                            {job.company.name}
                                             <FaStar className='mx-1 text-yellow-400 w-4 h-4'/>
                                             <span className='text-gray-600'>4.3 | 1.5km</span>
                                         </div>

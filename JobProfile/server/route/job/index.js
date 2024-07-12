@@ -1,7 +1,7 @@
 import express from "express";
 import {CompanyModel, JobModel, UserModel} from "../../Database/allModel";
 
-const {auth} = require('../../middlewares/auth');
+const {auth, employerOnly} = require('../../middlewares/auth');
 const router = express.Router();
 
 /**
@@ -10,7 +10,7 @@ const router = express.Router();
  @Access Private
  **/
 
-router.post('/', auth, async ( req, res ) => {
+router.post('/', auth, employerOnly, async ( req, res ) => {
     try {
         const {
             title,
@@ -23,9 +23,10 @@ router.post('/', auth, async ( req, res ) => {
             experience,
             salary,
             openings,
+            industry,
             skills,
             shortDescription,
-            deparment
+            department
         } = req.body;
         const user = await UserModel.findById(req.userId);
         if (!user) {
@@ -50,9 +51,9 @@ router.post('/', auth, async ( req, res ) => {
             experience: experience,
             salary: salary,
             openings: openings,
-            skills: skills,
             shortDescription: shortDescription,
-            department: deparment
+            industry:industry,
+            department: department
         })
         res.status(200).json({job: job});
 
@@ -71,7 +72,7 @@ router.post('/', auth, async ( req, res ) => {
 router.get('/', async ( req, res ) => {
     try {
         const {title} = req.query;
-        const job = await JobModel.find({title: new RegExp(title, 'i')});
+        const job = await JobModel.find({title: new RegExp(title, 'i')}).populate('company', 'name');
         if (job.length === 0) {
             return res.status(400).json({message: "No job found"});
         }
