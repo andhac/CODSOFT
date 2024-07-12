@@ -38,13 +38,16 @@ const JobSchema = new mongoose.Schema({
         enum: ['full-time', 'part-time', 'internship', 'permanent'],
         required: true
     },
-    education: [
-        {
-            type: [String],
-            required: true
+    education: {
+        Ug: {
+            type: String, // Set to true if this field is mandatory
         },
-    ],
-    experience: {
+        Pg: {
+            type: String, // Set to true if this field is mandatory
+        }
+    },
+
+experience: {
         type: String,
         required: true
     },

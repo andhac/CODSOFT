@@ -10,10 +10,20 @@ export const fetchJobs = createAsyncThunk('jobs/fetchJobs', async( title, thunkA
     }
 })
 
+export const fetchJobById = createAsyncThunk('jobs/fetchJobById', async(id, thunkAPI) => {
+    try{
+        const response = await axios.get(`http://localhost:4000/job/${id}`)
+        return response.data;
+    }catch (err){
+        return thunkAPI.rejectWithValue(err.response.data)
+    }
+})
+
 const jobSlice = createSlice({
     name:'jobs',
     initialState:{
         jobs:[],
+        job: null,
         status: 'idle',
         error: null
     },
@@ -31,7 +41,19 @@ const jobSlice = createSlice({
                 console.log("Error of Job", action.payload);
                 state.error = action.payload;
             })
-    }
+            .addCase(fetchJobById.pending, (state) => {
+                state.status = 'loading';
+            })
+            .addCase(fetchJobById.fulfilled, (state, action) => {
+                state.status = 'succeeded';
+                state.job = action.payload;
+            }).addCase(fetchJobById.rejected, (state, action) => {
+            state.status = 'failed';
+            console.log("Error of Job", action.payload);
+            state.error = action.payload;
+        })
+    },
+    devTools: true
 })
 
 export default jobSlice.reducer;

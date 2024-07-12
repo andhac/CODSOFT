@@ -1,24 +1,43 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {useParams} from "react-router-dom";
 import {FaStar} from "react-icons/fa";
 import {IoBagOutline} from "react-icons/io5";
 import {LiaRupeeSignSolid} from "react-icons/lia";
 import {GrLocation} from "react-icons/gr";
-import jobs from "../../assets/rawData/MOCK_DATA.json"
+
+//redux
+import {useDispatch, useSelector} from "react-redux";
+import {fetchJobById} from "../../redux/slice/jobSlice";
+
 const JobPage = ( {isLoggedIn, education} ) => {
-    const {jobId} = useParams();
-    const job = jobs.find((job) => job.id === parseInt(jobId))
+    const {id} = useParams();
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        console.log("Job Id", id)
+        dispatch(fetchJobById(id))
+    }, [dispatch, id]);
+
+    const {job, status, error} = useSelector(( state ) => state.jobs)
+
+    if (status === 'loading') {
+        return <div>Loading...</div>;
+    }
+
+    if (error) {
+        return <div>Error: {error.message}</div>;
+    }
     if (!job) {
         return <div>Job not found</div>
     }
+    console.log("Education", job.education)
 
     const postingDate = '2024-05-24';
     const calculateDate = ( date ) => {
         const postedDate = new Date(date);
         const currentDate = new Date();
         const differInTime = currentDate.getTime() - postedDate.getTime();
-        const differInDays = Math.ceil(differInTime / (1000 * 3600 * 24));
-        return differInDays;
+        return Math.ceil(differInTime / (1000 * 3600 * 24));
     }
     const daysAgo = calculateDate(postingDate)
 
@@ -33,7 +52,7 @@ const JobPage = ( {isLoggedIn, education} ) => {
                                 <div className=" mb-2">
                                     <div className="text-lg font-thin">{job.title}</div>
                                     <div className="font-[400] font-sans text-gray-700 flex items-center mb-3">
-                                        {job.company}
+                                        {job.company.name}
                                         <FaStar className='ml-3  text-yellow-400 w-4 h-4'/>
                                         <span className=' mx-2 text-gray-600'>4.3 | 1.5km</span>
                                     </div>
@@ -94,7 +113,7 @@ const JobPage = ( {isLoggedIn, education} ) => {
 
                             <div>
                                 <ul className='text-gray-800 list-disc font-sans ml-7 mr-3 '>
-                                    {job.description.map((item,index) => (
+                                    {job.description.map(( item, index ) => (
                                         <li key={index}>{item}</li>
                                     ))}
                                 </ul>
@@ -110,18 +129,12 @@ const JobPage = ( {isLoggedIn, education} ) => {
                                     className='text-gray-800 font-[400] '>{job.employmentType}</span></div>
                             </div>
 
-                            <div className='my-3' >
-                                <div className='font-sans font-semibold ' >Education</div>
-                                {job.education.map((edu, index) => (
-                                    <div key={index}>
-                                        {edu.UG && (
-                                            <div className='font-sans font-semibold'>UG: <span className='text-gray-800 font-[400]'>{edu.UG}</span></div>
-                                        )}
-                                        {edu.PG && (
-                                            <div className='font-sans font-semibold'>PG: <span className='text-gray-800 font-[400]'>{edu.PG}</span></div>
-                                        )}
-                                    </div>
-                                ))}
+                            <div className='my-3'>
+                                <div className='font-sans font-semibold '>Education</div>
+                                <div className='font-sans font-semibold'>UG: <span
+                                    className='text-gray-800 font-[400]'>{job.education.Ug}</span></div>
+                                <div className='font-sans font-semibold'>PG: <span
+                                    className='text-gray-800 font-[400]'>{job.education.Pg}</span></div>
                             </div>
 
                         </div>

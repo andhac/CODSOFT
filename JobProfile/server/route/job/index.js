@@ -39,6 +39,7 @@ router.post('/', auth, employerOnly, async ( req, res ) => {
         if (!checkCompany) {
             return res.status(400).json({message: "Company does not exist"});
         }
+        console.log("Education:", education);
         const job = await JobModel.create({
             title: title,
             description: description,
@@ -47,7 +48,10 @@ router.post('/', auth, employerOnly, async ( req, res ) => {
             location: location,
             employmentType: employmentType,
             postedBy: req.userId,
-            education: education,
+            education: {
+                Ug: education.Ug,
+                Pg: education.Pg
+            },
             experience: experience,
             salary: salary,
             openings: openings,
@@ -112,11 +116,12 @@ router.get('/company', async ( req, res ) => {
  * @Desc Get job by id
  * @Access Public
  */
-router.get('/:id', async ( req, res ) => {
+router.get('/:_id', async ( req, res ) => {
     try {
-        const {id} = req.params;
-        const job = await JobModel.find({_id: id});
-        if (job.length === 0) {
+        const {_id} = req.params;
+        console.log(_id)
+        const job = await JobModel.findById(_id).populate('company', 'name');
+        if (!job) {
             return res.status(400).json({message: "No job found for this particular Role"});
         }
         res.status(200).json(job);

@@ -90,7 +90,7 @@ console.log("Jobs Detail:", jobs)
                                             <span className='text-gray-600'>4.3 | 1.5km</span>
                                         </div>
                                     </div>
-                                    <div className="text-gray-600 text-sm flex items-center mb-4">
+                                    <div className="text-gray-600 text-sm flex items-center mb-4 font-sans font-semibold ">
                                         <IoBagOutline className="mr-2 w-5 h-5"/>
                                         <span className="mr-2">{job.experience}</span>
                                         <span className="text-gray-400">|</span>
@@ -101,8 +101,8 @@ console.log("Jobs Detail:", jobs)
                                         <span>{job.location}</span>
                                     </div>
                                     <div className="text-gray-700 mb-4">
-                                        <MdOutlineDescription className="inline mr-2 w-5 h-5"/>
-                                        <span>{job.shortDescription}</span>
+                                        <MdOutlineDescription className="inline mr-2 w-5 h-5 "/>
+                                        <span className='font-sans font-semibold text-black text-sm ' >{job.shortDescription}</span>
                                     </div>
                                     <div className="flex flex-wrap gap-2">
                                         {["HTML", "CSS", "JavaScript", "React", "Node"].map(( skill, index ) => (
