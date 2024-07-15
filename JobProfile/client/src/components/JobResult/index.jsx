@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Link, useLocation} from "react-router-dom";
+import {Link, useLocation,useParams} from "react-router-dom";
 import {FaStar} from "react-icons/fa";
 import {GrLocation} from "react-icons/gr";
 import {IoBagOutline} from "react-icons/io5";
@@ -8,7 +8,7 @@ import {MdOutlineDescription} from "react-icons/md";
 
 //Redux
 import {useDispatch, useSelector} from "react-redux";
-import {fetchJobs} from "../../redux/slice/jobSlice";
+import {fetchJobs, fetchJobByLocation} from "../../redux/slice/jobSlice";
 
 const useQuery = () => {
     return new URLSearchParams(useLocation().search);
@@ -16,29 +16,35 @@ const useQuery = () => {
 
 const JobResult = () => {
     const query = useQuery();
-    const searchQuery = query.get('q').toLowerCase();
+    const {city} = useParams();
+console.log("City", city)
+     const searchQuery = query.get('q')? query.get('q').toLowerCase(): null;
     console.log(searchQuery);
     const dispatch = useDispatch();
     const {jobs, status, error} = useSelector(( state ) => state.jobs)
-    // const filterJob = jobs.filter(job => job.title.toLowerCase().includes(searchQuery));
     const [currentPage, setCurrentPage] = useState(1);
     const jobPerPage = 10;
 
     useEffect(() => {
+        console.log("city PAra", city)
         if (searchQuery) {
             dispatch(fetchJobs(searchQuery))
+        }else if (city){
+            dispatch(fetchJobByLocation(city))
         }
-    }, [searchQuery, dispatch]);
+    }, [searchQuery, city, dispatch]);
+    console.log("jobs city" , city)
 
-    const filterJob = jobs.filter(job => job.title.toLowerCase().includes(searchQuery));
+    // const filterJob = jobs.filter(job => job.title.toLowerCase().includes(searchQuery));
 console.log("Jobs Detail:", jobs)
+    // console.log("Filter Job", filterJob)
     //Calculating the index of the last job
     const indexOfLastJob = currentPage * jobPerPage;
     const indexOfFirstJob = indexOfLastJob - jobPerPage;
-    const currentJob = filterJob.slice(indexOfFirstJob, indexOfLastJob);
+    const currentJob = jobs.slice(indexOfFirstJob, indexOfLastJob);
 
     //Calculate the total number of pages
-    const totalPage = Math.ceil(filterJob.length / jobPerPage);
+    const totalPage = Math.ceil(jobs.length / jobPerPage);
 
     //Navigation for next Page
     const nextPage = () => {
@@ -58,9 +64,9 @@ console.log("Jobs Detail:", jobs)
         <>
 
             <div className='text-center py-10   '>
-                Showing {indexOfFirstJob + 1} to {indexOfLastJob > filterJob.length ? filterJob.length : indexOfLastJob} of {filterJob.length} jobs
+                Showing {indexOfFirstJob + 1} to {indexOfLastJob > jobs.length ? jobs.length : indexOfLastJob} of {jobs.length} jobs
             </div>
-            {filterJob.length === 0 ? (
+            {jobs.length === 0 ? (
                <div className='w-full flex justify-center' >
                     <div className='container max-w-2xl'>
                         <div className=' my-2 bg-white p-6 border border-gray-100 shadow-lg rounded-3xl ' >

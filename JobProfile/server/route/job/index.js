@@ -132,6 +132,28 @@ router.get('/:_id', async ( req, res ) => {
 })
 
 /**
+ * @route Get /
+ * @desc Get all jobs based on Location
+ * @access Public
+ */
+
+router.get('/loc/:location', async (req, res) => {
+    try{
+        const {location} = req.params;
+        const job = await JobModel.find({location: new RegExp(location, 'i')}).populate('company', 'name');
+        if(job.length === 0){
+            return res.status(400).json({message: "No job found in this location"});
+        }
+        res.status(200).json(job);
+
+    }catch (err) {
+        console.log(err);
+        res.status(500).json({message: "Something went wrong"});
+    }
+})
+
+
+/**
  @Route Put /:_id
  @Desc Update job by id
  @Access Private

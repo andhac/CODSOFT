@@ -92,7 +92,7 @@ function Hero() {
                                     <GrLocation className='absolute left-2 -translate-y-1/2 top-1/2 p-1 w-7 h-7 text-gray-700' />
                                     <input
                                         type="text"
-                                        placeholder="Job Type"
+                                        placeholder="Job location"
                                         className="w-44 input rounded-full px-8 py-3 border-2 border-transparent focus:outline-none focus:border-blue-500 placeholder-gray-400 transition-all duration-300 shadow-md"
                                     />
                                 </form>

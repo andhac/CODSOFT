@@ -131,10 +131,10 @@ const JobPage = ( {isLoggedIn, education} ) => {
 
                             <div className='my-3'>
                                 <div className='font-sans font-semibold '>Education</div>
-                                <div className='font-sans font-semibold'>UG: <span
-                                    className='text-gray-800 font-[400]'>{job.education.Ug}</span></div>
-                                <div className='font-sans font-semibold'>PG: <span
-                                    className='text-gray-800 font-[400]'>{job.education.Pg}</span></div>
+                                {job.education.Ug !== '' && <div className='font-sans font-semibold'>UG: <span
+                                    className='text-gray-800 font-[400]'>{job.education.Ug}</span></div>}
+                                {job.education.Pg !== '' && <div className='font-sans font-semibold'>PG: <span
+                                    className='text-gray-800 font-[400]'>{job.education.Pg}</span></div>}
                             </div>
 
                         </div>

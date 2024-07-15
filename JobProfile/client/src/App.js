@@ -26,6 +26,7 @@ function App() {
    <>
     <HomeHoc exact component={HomePage} path="/" className='overflow-y-scroll' />
     <HomeHoc exact component={JobResult} path="/search" />
+    <HomeHoc exact component={JobResult} path="/job-in-/:city" />
     <HomeHoc exact component={JobPage} path="/job/:id" />
      <RegisterHOC exact component={SignUp} path='/create-account'/>
    </>
